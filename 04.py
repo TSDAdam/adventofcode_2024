@@ -1,10 +1,12 @@
 with open('./04.in') as file:
     data = [line.strip() for line in file]
 word = 'XMAS'
+word2 = 'MAS'
 total = 0
 
 xs = [-1, 0, 1]
 ys = [-1, 0, 1]
+
 
 
 def checknext(xx, yy, xdir, ydir, currentstring, index, found):
@@ -33,11 +35,12 @@ def checkletters(xx, yy, currstring, wordindex, t):
     return t
 
 
+
 def checkmas(x, y):
     validwords = ('SAM', 'MAS')
     words = []
-    if 0 <= x <= len(data[0])-2 and 0 <= y <= len(data)-2:
-        for xx in -1, 1:
+    if 0 < x <= len(data[0])-2 and 0 < y <= len(data)-2:
+        for xx in (-1, 1):
             words.append(data[x + xx][y-1] + 'A' + data[x + -xx][y+1])
             words.append(data[x + xx][y+1] + 'A' + data[x + -xx][y-1])
             t = 0
