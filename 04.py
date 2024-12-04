@@ -1,4 +1,4 @@
-with open('./04.test') as file:
+with open('./04.in') as file:
     data = [line.strip() for line in file]
 word = 'XMAS'
 total = 0
@@ -36,13 +36,20 @@ def checkletters(xx, yy, currstring, wordindex, t):
 def checkmas(x, y):
     validwords = ('SAM', 'MAS')
     words = []
-    if 0 <= x <= len(data[0]) and 0 <= y <= len(data):
+    if 0 <= x <= len(data[0])-2 and 0 <= y <= len(data)-2:
         for xx in -1, 1:
-            words.append(data[x + xx][y-1] + 'A' + data[x + xx][y+1])
-            words.append(data[x + xx][y+1] + 'A' + data[x + xx][y-1])
-            print(words)
-            if words[0] in validwords and words[1] in validwords:
-                if words[2] == 'SAM' or words[3
+            words.append(data[x + xx][y-1] + 'A' + data[x + -xx][y+1])
+            words.append(data[x + xx][y+1] + 'A' + data[x + -xx][y-1])
+            t = 0
+            for word in words:
+                #print(word)
+                if word in validwords:
+                    t += 1
+                    # print('word ', word, ' found at ',x ,y)
+            if t > 1:
+                return 1
+            else:
+                return 0
     else:
         return 0
 
@@ -60,5 +67,5 @@ t2 = 0
 for x, row in enumerate(data):
     for y, c in enumerate(row):
         if c == 'A':
-            print(x, y)
             t2 += checkmas(x, y)
+print(t2)
