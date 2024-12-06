@@ -1,5 +1,5 @@
 from copy import deepcopy
-with open('./06.test') as file:
+with open('./06.in') as file:
     data = [line.strip() for line in file]
 
 R = len(data[0])
@@ -15,7 +15,7 @@ for y in range(R):
             startposition = (x,y)
         elif data[y][x] == '#':
             obstacles.add((x,y))
-print(obstacles)
+#print(obstacles)
 d = 0 # index for directions - 0=up, 1=right, 2=down, 3=left
 nextpos = (0,0)
 exited = False
@@ -43,7 +43,7 @@ print(len(visited) -1 )
 
 loopcount = 0
 for i, loc in enumerate(visited):
-    print('testing ',i, ' of ', len(visited))
+    #print('testing ',i, ' of ', len(visited))
     position = startposition
     visitedwithdir = set()
     looped = False
