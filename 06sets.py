@@ -1,7 +1,8 @@
+import time
 from copy import deepcopy
 with open('./06.in') as file:
     data = [line.strip() for line in file]
-
+start_time = time.time()
 R = len(data[0])
 C = len(data)
 dirs = [(0, -1), (+1, 0), (0, +1), (-1, 0)] # up, right, down, left - follows 90 deg turn order.
@@ -80,3 +81,5 @@ for i, loc in enumerate(visited):
             obstacles.remove(loc)
 
 print(loopcount)
+end_time = time.time()
+print('time taken: ', start_time-end_time)
