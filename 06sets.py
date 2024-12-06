@@ -1,40 +1,39 @@
 from copy import deepcopy
-with open('./06.in') as file:
+with open('./06.test') as file:
     data = [line.strip() for line in file]
 
 R = len(data[0])
 C = len(data)
-dirs = [[0, -1], [+1, 0], [0, +1], [-1, 0]] # up, right, down, left - follows 90 deg turn order.
-visited = []
+dirs = [(0, -1), (+1, 0), (0, +1), (-1, 0)] # up, right, down, left - follows 90 deg turn order.
+visited = set()
 
 obstacles = set()
-position = [0,0]
+position = (0,0)
 for y in range(R):
     for x in range(C):
         if data[y][x] == '^':
-            startposition = [x,y]
+            startposition = (x,y)
         elif data[y][x] == '#':
-            obstacles.add(str(x,y))
+            obstacles.add((x,y))
 print(obstacles)
 d = 0 # index for directions - 0=up, 1=right, 2=down, 3=left
-nextpos = [0,0]
+nextpos = (0,0)
 exited = False
 position = startposition
 while not exited:
     c = len(visited)
-    nextpos[0] = deepcopy(position[0]) + dirs[d][0]
-    nextpos[1] = deepcopy(position[1]) + dirs[d][1]
+    nextpos = ((position[0] + dirs[d][0]), (position[1] + dirs[d][1]))
     if nextpos in obstacles:
         if position not in visited:
-            visited.append(position)
+            visited.add(position)
         if d == 3:
             d = 0
         else:
             d += 1
     else:
         if position not in visited:
-            visited.append(position)
-        position = deepcopy(nextpos)
+            visited.add(position)
+        position = nextpos
     if (nextpos[0] < 0 or nextpos[0] > R) or (nextpos[1] < 0 or nextpos[1] > C):
         exited = True
 # part 1
@@ -46,40 +45,38 @@ loopcount = 0
 for i, loc in enumerate(visited):
     print('testing ',i, ' of ', len(visited))
     position = startposition
-    visitedwithdir = []
+    visitedwithdir = set()
     looped = False
-    obstacles.add(str(loc))
+    obstacles.add(loc)
     d = 0 # index for directions - 0=up, 1=right, 2=down, 3=left
     nextpos = [0,0]
     exited = False
 
     while not exited and not looped:
-        nextpos[0] = deepcopy(position[0]) + dirs[d][0]
-        nextpos[1] = deepcopy(position[1]) + dirs[d][1]
-        nextposstring = str(nextpos)
-        if nextposstring in obstacles: # if we're going to hit an obstacle, change direction
-            visitstring = str(position) + str(d) # combine x,y and direction
+        nextpos = ((position[0] + dirs[d][0]), (position[1] + dirs[d][1]))
+        if nextpos in obstacles: # if we're going to hit an obstacle, change direction
+            visitstring = (position[0], position[1], d) # combine x,y and direction
             if visitstring not in visitedwithdir: # have we not been here before?
-                visitedwithdir.append(visitstring)
+                visitedwithdir.add(visitstring)
             else:
                 loopcount += 1
-                obstacles = obstacles[:-1]
+                obstacles.remove(loc)
                 looped = True
             if d == 3:
                 d = 0
             else:
                 d += 1
         else:
-            visitstring = str(position) + str(d)
+            visitstring = (position[0], position[1], d)
             if visitstring not in visitedwithdir:
-                visitedwithdir.append(visitstring)
+                visitedwithdir.add(visitstring)
             else:
                 loopcount += 1
-                obstacles = obstacles[:-1]
+                obstacles.remove(loc)
                 looped = True
-            position = deepcopy(nextpos)
+            position = nextpos
         if (nextpos[0] < 0 or nextpos[0] > R) or (nextpos[1] < 0 or nextpos[1] > C): # check to see whether left bounds
             exited = True
-            obstacles = obstacles[:-1]
+            obstacles.remove(loc)
 
 print(loopcount)
