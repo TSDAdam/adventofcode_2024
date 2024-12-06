@@ -7,14 +7,14 @@ C = len(data)
 dirs = [[0, -1], [+1, 0], [0, +1], [-1, 0]] # up, right, down, left - follows 90 deg turn order.
 visited = []
 
-obstacles = []
+obstacles = set()
 position = [0,0]
 for y in range(R):
     for x in range(C):
         if data[y][x] == '^':
             startposition = [x,y]
         elif data[y][x] == '#':
-            obstacles.append([x,y])
+            obstacles.add(str(x,y))
 print(obstacles)
 d = 0 # index for directions - 0=up, 1=right, 2=down, 3=left
 nextpos = [0,0]
@@ -48,7 +48,7 @@ for i, loc in enumerate(visited):
     position = startposition
     visitedwithdir = []
     looped = False
-    obstacles.append(loc)
+    obstacles.add(str(loc))
     d = 0 # index for directions - 0=up, 1=right, 2=down, 3=left
     nextpos = [0,0]
     exited = False
@@ -56,7 +56,8 @@ for i, loc in enumerate(visited):
     while not exited and not looped:
         nextpos[0] = deepcopy(position[0]) + dirs[d][0]
         nextpos[1] = deepcopy(position[1]) + dirs[d][1]
-        if nextpos in obstacles: # if we're going to hit an obstacle, change direction
+        nextposstring = str(nextpos)
+        if nextposstring in obstacles: # if we're going to hit an obstacle, change direction
             visitstring = str(position) + str(d) # combine x,y and direction
             if visitstring not in visitedwithdir: # have we not been here before?
                 visitedwithdir.append(visitstring)
