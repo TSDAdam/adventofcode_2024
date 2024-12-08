@@ -1,6 +1,6 @@
 from copy import deepcopy
 from collections import defaultdict
-with open('./08.test') as file:
+with open('./08.in') as file:
     data = [line.strip() for line in file]
 
 R = len(data[0])
@@ -16,19 +16,20 @@ for y, row in enumerate(data): # parse input
 for k, v in antennatypes.items():
     print(k)
     for i, loc in enumerate(v):
+        p2antenodes.add((loc[0], loc[1])) # Current locations count too, Adam!
         for l in range(i+1, len(v)):
             diffy = abs(loc[0] - v[l][0])
             diffx = abs(loc[1] - v[l][1])
             if loc[0] < v[l][0]: # if this node is smaller Y
                 y1 = loc[0] - diffy # make the antenode have minus the difference
                 y2 = v[l][0] + diffy # and the opposite have positive
-                stepy1 = loc[0] - diffy
-                stepy2 = v[l][0] + diffy
+                stepy1 = -diffy
+                stepy2 = +diffy
             elif loc[0] > v[l][0]: # as above, but the opposite way around
                 y1 = loc[0] + diffy
                 y2 = v[l][0] - diffy
-                stepy1 = loc[0] + diffy
-                stepy2 = v[l][0] - diffy
+                stepy1 = +diffy
+                stepy2 = -diffy
             else:
                 y1 = loc[0]
                 y2 = loc[0]
@@ -37,13 +38,13 @@ for k, v in antennatypes.items():
             if loc[1] < v[l][1]:
                 x1 = loc[1] - diffx # same as the Y co-ords, but X
                 x2 = v[l][1] + diffx
-                stepx1 = loc[1] - diffx
-                stepx2 = v[l][1] + diffx
+                stepx1 = -diffx
+                stepx2 = +diffx
             elif loc[1] > v[l][1]:
-                x1 = loc[1] + diffx
+                x1 = loc[1] +diffx
                 x2 = v[l][1] - diffx
-                stepx1 = loc[1] + diffx
-                stepx2 = v[l][1] - diffx
+                stepx1 = +diffx
+                stepx2 = -diffx
             else:
                 x1 = loc[1]
                 x2 = loc[1]
@@ -58,7 +59,6 @@ for k, v in antennatypes.items():
                     x1 += stepx1
             if 0 <= y2 < R and 0 <= x2 < C:
                 antenodes.add((y2, x2))
-                p2antenodes.add((y2, x2))
                 while 0 <= y2 < R and 0 <= x2 < C:
                     p2antenodes.add((y2, x2))
                     y2 += stepy2
@@ -66,4 +66,4 @@ for k, v in antennatypes.items():
 # part one
 print(len(antenodes))
 # part two
-print(len(p2antenodes) + len(antenodes))
+print(len(p2antenodes))
