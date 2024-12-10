@@ -1,5 +1,5 @@
 from copy import deepcopy
-with open('./10.test') as file:
+with open('./10.in') as file:
     d = [line.strip() for line in file]
 
 data = []
@@ -11,22 +11,24 @@ for r in d:
 
 R = len(data[0])
 C = len(data)
+trails = 0
 validpaths = []
 dirs = [(-1, 0), (0, +1), (+1, 0), (0, -1)]
 
 def tracepath(r, c, height, score, found9s):
+    global trails
     for dir in dirs:
         rx = r + dir[0]
         cx = c + dir[1]
         if 0 <= rx < R and 0 <= cx < C:
-            print(data[rx][cx])
             if data[rx][cx] == height + 1:
                 if data[rx][cx] == 9:
                     if (rx, cx) not in found9s:
                         found9s.append((rx, cx))
-                        return score + 1
+                        trails = trails + 1
+                        score += 1
                     else:
-                        return score
+                        trails = trails + 1
                 else:
                     score += tracepath(rx, cx, height + 1, 0, found9s)
 
@@ -37,6 +39,6 @@ for r ,row in enumerate(data):
     for c, col in enumerate(row):
         found9 = []
         if col == 0:
-            validpaths.append(tracepath(r, c, col, 0, found9))
-print(validpaths)
+            validpaths.append(tracepath(r, c, col, 0, found9)) # row, col, value, 0 score, empty list
 print(sum( x for x in validpaths))
+print(trails)
