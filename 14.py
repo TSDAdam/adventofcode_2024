@@ -36,7 +36,7 @@ print(q1 * q2 * q3 * q4)
 
 # part 2
 
-for t in range(500):
+for t in range(12000):
     positions = []
     for y in range(H+1):
         row = []
@@ -53,12 +53,24 @@ for t in range(500):
         #print(px1, py1)
         robots[i] = [(px1, py1), (robot[1][0], robot[1][1])]
         positions[py1][px1] = 'X'
+    possibletree = False
+    maxlen = 0
     for i in positions:
-        thisrow = ''
-        for j in i:
-            thisrow = thisrow + j
-        with open ('./output.txt', 'a') as f:
-            print(thisrow, file=f)
-    with open('./output.txt', 'a') as f:
-        print(t, file=f)
+        for x, j in enumerate(i):
+            thisx = 0
+            if j == 'X':
+                for xx in range(x, len(i)-1):
+                    thisx += 1
+                    maxlen = max(maxlen, thisx)
+                    if i[xx] != 'X':
+                        break
+    if maxlen >= 10:
+        for i in positions:
+            thisrow = ''
+            for j in i:
+                thisrow = thisrow + j
+            with open ('./output.txt', 'a') as f:
+                print(thisrow, file=f)
+        with open('./output.txt', 'a') as f:
+            print(t, file=f)
    #_ = input() 
